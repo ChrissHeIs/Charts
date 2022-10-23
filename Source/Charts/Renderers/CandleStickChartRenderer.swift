@@ -159,6 +159,8 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 trans.rectValueToPixel(&_bodyRect)
                 
                 // draw body differently for increasing and decreasing entry
+                
+                let cornerRadius = min(dataSet.candleCornerRadius, _bodyRect.width / 2, _bodyRect.height / 2)
 
                 if open > close
                 {
@@ -166,7 +168,7 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
 
                     let fillColor = dataSet.decreasingBackgroundColor ?? dataSet.color(atIndex: j)
                     let strokeColor = dataSet.decreasingBorderColor ?? dataSet.color(atIndex: j)
-                    let path = CGPath(roundedRect: _bodyRect, cornerWidth: dataSet.candleCornerRadius, cornerHeight: dataSet.candleCornerRadius, transform: nil)
+                    let path = CGPath(roundedRect: _bodyRect, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
                     
                     context.addPath(path)
                     context.setStrokeColor(strokeColor.cgColor)
@@ -181,7 +183,7 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
 
                     let fillColor = dataSet.increasingBackgroundColor ?? dataSet.color(atIndex: j)
                     let strokeColor = dataSet.increasingBorderColor ?? dataSet.color(atIndex: j)
-                    let path = CGPath(roundedRect: _bodyRect, cornerWidth: dataSet.candleCornerRadius, cornerHeight: dataSet.candleCornerRadius, transform: nil)
+                    let path = CGPath(roundedRect: _bodyRect, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
                     
                     context.addPath(path)
                     context.setStrokeColor(strokeColor.cgColor)
