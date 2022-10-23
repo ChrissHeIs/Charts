@@ -19,6 +19,9 @@ open class YAxisRenderer: NSObject, AxisRenderer
     @objc public let viewPortHandler: ViewPortHandler
     @objc public let axis: YAxis
     @objc public let transformer: Transformer?
+    public var drawsGradientLimitLines = false
+    public var drawsLimitLinesValuesOnAxis = false
+    public var limitLineMarkerBackgroundColor: UIColor = .clear
 
     @objc public init(viewPortHandler: ViewPortHandler, axis: YAxis, transformer: Transformer?)
     {
@@ -140,6 +143,58 @@ open class YAxisRenderer: NSObject, AxisRenderer
                              at: CGPoint(x: fixedPosition + xOffset, y: positions[i].y + offset),
                              align: textAlign,
                              attributes: [.font: labelFont, .foregroundColor: labelTextColor])
+        }
+    }
+    
+    open func renderLimitLineValueMarkers(context: CGContext) {
+        if !drawsLimitLinesValuesOnAxis { return }
+        
+        guard let transformer = self.transformer else { return }
+        
+        let limitLines = axis.limitLines
+        
+        guard !limitLines.isEmpty else { return }
+
+        context.saveGState()
+        defer { context.restoreGState() }
+
+        let trans = transformer.valueToPixelMatrix
+        
+        for l in limitLines where l.isEnabled
+        {
+            context.saveGState()
+            defer { context.restoreGState() }
+            
+            let value = axis.valueFormatter?.stringForValue(l.limit, axis: axis) ?? ""
+            var markerSize = value.size(withAttributes: [.font: axis.labelFont])
+            markerSize.width += 2 * axis.xOffset
+            let yOffset = 3.0
+            markerSize.height += 2 * yOffset
+            
+            
+            var position = CGPoint(x: 0.0, y: CGFloat(l.limit)).applying(trans)
+            
+            let markerBackgroundRect = CGRect(x: viewPortHandler.contentRight,
+                                              y: position.y - markerSize.height / 2,
+                                              width: markerSize.width,
+                                              height: markerSize.height)
+            
+            let path = CGPath(roundedRect: markerBackgroundRect,
+                              cornerWidth: 4,
+                              cornerHeight: 4,
+                              transform: nil)
+            
+            context.addPath(path)
+            context.setStrokeColor(l.lineColor.cgColor)
+            context.setFillColor(limitLineMarkerBackgroundColor.cgColor)
+            let mode: CGPathDrawingMode = .fillStroke
+
+            context.drawPath(using: mode)
+            
+            context.drawText(value,
+                             at: CGPoint(x: markerBackgroundRect.midX, y: markerBackgroundRect.minY + yOffset),
+                             align: .center,
+                             attributes: [.font: axis.labelFont, .foregroundColor: axis.labelTextColor])
         }
     }
     
@@ -273,22 +328,38 @@ open class YAxisRenderer: NSObject, AxisRenderer
             position.y = CGFloat(l.limit)
             position = position.applying(trans)
             
-            context.beginPath()
-            context.move(to: CGPoint(x: viewPortHandler.contentLeft, y: position.y))
-            context.addLine(to: CGPoint(x: viewPortHandler.contentRight, y: position.y))
+            let startPoint = CGPoint(x: viewPortHandler.contentRight, y: position.y)
+            let endPoint = CGPoint(x: viewPortHandler.contentLeft, y: position.y)
             
-            context.setStrokeColor(l.lineColor.cgColor)
-            context.setLineWidth(l.lineWidth)
-            if l.lineDashLengths != nil
-            {
-                context.setLineDash(phase: l.lineDashPhase, lengths: l.lineDashLengths!)
+            if drawsGradientLimitLines {
+
+                context.clip(to: [CGRect(origin: endPoint, size: CGSize(width: viewPortHandler.contentRight - viewPortHandler.contentLeft, height: 1))])
+                let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                                          colors: [l.lineColor.cgColor, l.lineColor.withAlphaComponent(0).cgColor] as CFArray,
+                                          locations: [0.0, 1.0])
+                context.drawLinearGradient(gradient!,
+                                           start: startPoint,
+                                           end: endPoint,
+                                           options: [])
+            } else {
+                
+                context.beginPath()
+                context.move(to: startPoint)
+                context.addLine(to: endPoint)
+                
+                context.setStrokeColor(l.lineColor.cgColor)
+                context.setLineWidth(l.lineWidth)
+                if l.lineDashLengths != nil
+                {
+                    context.setLineDash(phase: l.lineDashPhase, lengths: l.lineDashLengths!)
+                }
+                else
+                {
+                    context.setLineDash(phase: 0.0, lengths: [])
+                }
+                
+                context.strokePath()
             }
-            else
-            {
-                context.setLineDash(phase: 0.0, lengths: [])
-            }
-            
-            context.strokePath()
             
             let label = l.label
             

@@ -273,6 +273,9 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         xAxisRenderer.renderAxisLabels(context: context)
         leftYAxisRenderer.renderAxisLabels(context: context)
         rightYAxisRenderer.renderAxisLabels(context: context)
+        
+        leftYAxisRenderer.renderLimitLineValueMarkers(context: context)
+        rightYAxisRenderer.renderLimitLineValueMarkers(context: context)
 
         if clipValuesToContentEnabled
         {
