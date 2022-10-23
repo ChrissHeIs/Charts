@@ -108,10 +108,14 @@ open class CandleChartDataSet: LineScatterCandleRadarChartDataSet, CandleChartDa
     open var neutralColor: NSUIColor?
     
     /// color for open > close
-    open var increasingColor: NSUIColor?
+    open var increasingBorderColor: NSUIColor?
+    open var increasingBackgroundColor: NSUIColor?
     
     /// color for open < close
-    open var decreasingColor: NSUIColor?
+    open var decreasingBorderColor: NSUIColor?
+    open var decreasingBackgroundColor: NSUIColor?
+    
+    open var candleCornerRadius = CGFloat(0)
     
     /// Are increasing values drawn as filled?
     /// increasing candlesticks are traditionally hollow

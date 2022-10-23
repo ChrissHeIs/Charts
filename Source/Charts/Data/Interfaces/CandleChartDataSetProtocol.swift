@@ -46,11 +46,13 @@ public protocol CandleChartDataSetProtocol: LineScatterCandleRadarChartDataSetPr
     /// color for open == close
     var neutralColor: NSUIColor? { get set }
     
-    /// color for open > close
-    var increasingColor: NSUIColor? { get set }
+    var increasingBorderColor: NSUIColor? { get set }
+    var increasingBackgroundColor: NSUIColor? { get set }
     
-    /// color for open < close
-    var decreasingColor: NSUIColor? { get set }
+    var decreasingBorderColor: NSUIColor? { get set }
+    var decreasingBackgroundColor: NSUIColor? { get set }
+    
+    var candleCornerRadius: CGFloat { get set }
     
     /// Are increasing values drawn as filled?
     var increasingFilled: Bool { get set }

@@ -95,10 +95,13 @@ class CandleStickChartViewController: DemoBaseViewController {
         set1.drawIconsEnabled = false
         set1.shadowColor = .darkGray
         set1.shadowWidth = 0.7
-        set1.decreasingColor = .red
+        set1.decreasingBorderColor = .red
+        set1.decreasingBackgroundColor = .red.withAlphaComponent(0.6)
         set1.decreasingFilled = true
-        set1.increasingColor = UIColor(red: 122/255, green: 242/255, blue: 84/255, alpha: 1)
-        set1.increasingFilled = false
+        set1.increasingBorderColor = .green
+        set1.increasingBackgroundColor = .green.withAlphaComponent(0.6)
+        set1.candleCornerRadius = 5
+        set1.increasingFilled = true
         set1.neutralColor = .blue
         
         let data = CandleChartData(dataSet: set1)

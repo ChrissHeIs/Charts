@@ -111,7 +111,7 @@ open class LegendRenderer: NSObject, Renderer
                     }
                 }
                 else if dataSet is CandleChartDataSetProtocol &&
-                    (dataSet as! CandleChartDataSetProtocol).decreasingColor != nil
+                    (dataSet as! CandleChartDataSetProtocol).decreasingBorderColor != nil
                 {
                     let candleDataSet = dataSet as! CandleChartDataSetProtocol
 
@@ -121,7 +121,7 @@ open class LegendRenderer: NSObject, Renderer
                     decreasingEntry.formLineWidth = dataSet.formLineWidth
                     decreasingEntry.formLineDashPhase = dataSet.formLineDashPhase
                     decreasingEntry.formLineDashLengths = dataSet.formLineDashLengths
-                    decreasingEntry.formColor = candleDataSet.decreasingColor
+                    decreasingEntry.formColor = candleDataSet.decreasingBorderColor
 
                     entries.append(decreasingEntry)
 
@@ -131,7 +131,7 @@ open class LegendRenderer: NSObject, Renderer
                     increasingEntry.formLineWidth = dataSet.formLineWidth
                     increasingEntry.formLineDashPhase = dataSet.formLineDashPhase
                     increasingEntry.formLineDashLengths = dataSet.formLineDashLengths
-                    increasingEntry.formColor = candleDataSet.increasingColor
+                    increasingEntry.formColor = candleDataSet.increasingBorderColor
 
                     entries.append(increasingEntry)
                 }

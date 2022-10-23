@@ -129,11 +129,11 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 {
                     if open > close
                     {
-                        shadowColor = dataSet.decreasingColor ?? dataSet.color(atIndex: j)
+                        shadowColor = dataSet.decreasingBorderColor ?? dataSet.color(atIndex: j)
                     }
                     else if open < close
                     {
-                        shadowColor = dataSet.increasingColor ?? dataSet.color(atIndex: j)
+                        shadowColor = dataSet.increasingBorderColor ?? dataSet.color(atIndex: j)
                     }
                     else
                     {
@@ -164,35 +164,31 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 {
                     accessibilityMovementDescription = "decreasing"
 
-                    let color = dataSet.decreasingColor ?? dataSet.color(atIndex: j)
+                    let fillColor = dataSet.decreasingBackgroundColor ?? dataSet.color(atIndex: j)
+                    let strokeColor = dataSet.decreasingBorderColor ?? dataSet.color(atIndex: j)
+                    let path = CGPath(roundedRect: _bodyRect, cornerWidth: dataSet.candleCornerRadius, cornerHeight: dataSet.candleCornerRadius, transform: nil)
                     
-                    if dataSet.isDecreasingFilled
-                    {
-                        context.setFillColor(color.cgColor)
-                        context.fill(_bodyRect)
-                    }
-                    else
-                    {
-                        context.setStrokeColor(color.cgColor)
-                        context.stroke(_bodyRect)
-                    }
+                    context.addPath(path)
+                    context.setStrokeColor(strokeColor.cgColor)
+                    context.setFillColor(fillColor.cgColor)
+                    let mode: CGPathDrawingMode = dataSet.isDecreasingFilled ? .fillStroke : .stroke
+
+                    context.drawPath(using: mode)
                 }
                 else if open < close
                 {
                     accessibilityMovementDescription = "increasing"
 
-                    let color = dataSet.increasingColor ?? dataSet.color(atIndex: j)
+                    let fillColor = dataSet.increasingBackgroundColor ?? dataSet.color(atIndex: j)
+                    let strokeColor = dataSet.increasingBorderColor ?? dataSet.color(atIndex: j)
+                    let path = CGPath(roundedRect: _bodyRect, cornerWidth: dataSet.candleCornerRadius, cornerHeight: dataSet.candleCornerRadius, transform: nil)
                     
-                    if dataSet.isIncreasingFilled
-                    {
-                        context.setFillColor(color.cgColor)
-                        context.fill(_bodyRect)
-                    }
-                    else
-                    {
-                        context.setStrokeColor(color.cgColor)
-                        context.stroke(_bodyRect)
-                    }
+                    context.addPath(path)
+                    context.setStrokeColor(strokeColor.cgColor)
+                    context.setFillColor(fillColor.cgColor)
+                    let mode: CGPathDrawingMode = dataSet.isIncreasingFilled ? .fillStroke : .stroke
+
+                    context.drawPath(using: mode)
                 }
                 else
                 {
@@ -229,12 +225,12 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
                 if open > close
                 {
                     accessibilityMovementDescription = "decreasing"
-                    barColor = dataSet.decreasingColor ?? dataSet.color(atIndex: j)
+                    barColor = dataSet.decreasingBorderColor ?? dataSet.color(atIndex: j)
                 }
                 else if open < close
                 {
                     accessibilityMovementDescription = "increasing"
-                    barColor = dataSet.increasingColor ?? dataSet.color(atIndex: j)
+                    barColor = dataSet.increasingBorderColor ?? dataSet.color(atIndex: j)
                 }
                 else
                 {

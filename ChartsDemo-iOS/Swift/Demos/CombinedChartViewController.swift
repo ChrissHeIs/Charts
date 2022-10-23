@@ -206,7 +206,7 @@ class CombinedChartViewController: DemoBaseViewController {
         
         let set = CandleChartDataSet(entries: entries, label: "Candle DataSet")
         set.setColor(UIColor(red: 80/255, green: 80/255, blue: 80/255, alpha: 1))
-        set.decreasingColor = UIColor(red: 142/255, green: 150/255, blue: 175/255, alpha: 1)
+        set.decreasingBorderColor = UIColor(red: 142/255, green: 150/255, blue: 175/255, alpha: 1)
         set.shadowColor = .darkGray
         set.valueFont = .systemFont(ofSize: 10)
         set.drawValuesEnabled = false
