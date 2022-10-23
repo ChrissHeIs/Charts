@@ -86,6 +86,8 @@ open class YAxis: AxisBase
     /// the side this axis object represents
     private var _axisDependency = AxisDependency.left
     
+    open var respectsLimitLinesInMinMaxCalculation = false
+    
     /// the minimum width that the axis should take
     /// 
     /// **default**: 0.0
@@ -179,6 +181,17 @@ open class YAxis: AxisBase
         {
             max = max + 1.0
             min = min - 1.0
+        }
+        
+        if respectsLimitLinesInMinMaxCalculation {
+            for limitLine in limitLines {
+                if limitLine.limit > max {
+                    max = limitLine.limit
+                }
+                if limitLine.limit < min {
+                    min = limitLine.limit
+                }
+            }
         }
         
         // bottom-space only effects non-custom min
