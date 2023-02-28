@@ -86,18 +86,19 @@ open class YAxis: AxisBase
     /// the side this axis object represents
     private var _axisDependency = AxisDependency.left
     
-    open var respectsLimitLinesInMinMaxCalculation = false
-    
     /// the minimum width that the axis should take
-    /// 
+    ///
     /// **default**: 0.0
     @objc open var minWidth = CGFloat(0)
     
     /// the maximum width that the axis can take.
     /// use Infinity for disabling the maximum.
-    /// 
+    ///
     /// **default**: CGFloat.infinity
     @objc open var maxWidth = CGFloat(CGFloat.infinity)
+    
+    open var limitLinesToRespectInMinMaxCalculation: [ChartLimitLine] = []
+    
     
     public override init()
     {
@@ -183,14 +184,12 @@ open class YAxis: AxisBase
             min = min - 1.0
         }
         
-        if respectsLimitLinesInMinMaxCalculation {
-            for limitLine in limitLines {
-                if limitLine.limit > max {
-                    max = limitLine.limit
-                }
-                if limitLine.limit < min {
-                    min = limitLine.limit
-                }
+        for limitLine in limitLinesToRespectInMinMaxCalculation {
+            if limitLine.limit > max {
+                max = limitLine.limit
+            }
+            if limitLine.limit < min {
+                min = limitLine.limit
             }
         }
         
