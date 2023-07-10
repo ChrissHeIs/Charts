@@ -332,6 +332,8 @@ open class YAxisRenderer: NSObject, AxisRenderer
             let endPoint = CGPoint(x: viewPortHandler.contentLeft, y: position.y)
             
             if drawsGradientLimitLines {
+                context.saveGState()
+                defer { context.restoreGState() }
 
                 context.clip(to: [CGRect(origin: endPoint, size: CGSize(width: viewPortHandler.contentRight - viewPortHandler.contentLeft, height: 1))])
                 let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
