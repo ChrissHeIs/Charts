@@ -191,6 +191,7 @@ open class CombinedChartRenderer: NSObject, DataRenderer
             if !newValue.isEmpty
             {
                 _drawOrder = newValue
+                createRenderers()
             }
         }
     }
